@@ -1,7 +1,8 @@
 
 public class Day2Solution {
     public int[] searchRange(int[] nums, int target) {
-        int start = -1, end =-1;
+        int start = -1;
+        int end =-1;
         for(int i =0 ; i <nums.length; i++){
             //Check to prevent non-target value indices to be assigned to start or end
             if(target!=nums[i]) continue;
