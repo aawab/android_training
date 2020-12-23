@@ -1,0 +1,4 @@
+mooc/vandy/java4android/gate/logic/UnitTests.java
+ mooc.vandy.java4android.gate.logic.UnitTests
+mooc/vandy/java4android/gate/logic/AutoGraderPreview.java
+ mooc.vandy.java4android.gate.logic.AutoGraderPreview

@@ -1,0 +1,12 @@
+mooc/vandy/java4android/gate/ui/MainActivity.java
+ mooc.vandy.java4android.gate.ui.MainActivity
+mooc/vandy/java4android/gate/BuildConfig.java
+ mooc.vandy.java4android.gate.BuildConfig
+mooc/vandy/java4android/gate/logic/Gate.java
+ mooc.vandy.java4android.gate.logic.Gate
+mooc/vandy/java4android/gate/ui/OutputInterface.java
+ mooc.vandy.java4android.gate.ui.OutputInterface
+mooc/vandy/java4android/gate/logic/Logic.java
+ mooc.vandy.java4android.gate.logic.Logic
+mooc/vandy/java4android/gate/logic/LogicInterface.java
+ mooc.vandy.java4android.gate.logic.LogicInterface

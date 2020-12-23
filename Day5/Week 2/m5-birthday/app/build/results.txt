@@ -1,0 +1,20 @@
+------------------------------Assignment Evaluation-----------------------------
+--------Your solution received points for the following grading rubrics:--------
+
+
+testCalculateThreshold
+Rubric Score: 30.0/30.0
+Goal: The goal of this evaluation is to test Calculate with return values within
+a threshold
+Reference: This Test fails when: calculate method failed to meet a 3% threshold.
+
+testResultRange
+Rubric Score: 30.0/30.0
+Goal: The goal of this evaluation is to test ResultRange return values.
+Reference: This Test fails when: calculate returns a value outside the range.
+
+testEfficiency
+Rubric Score: 30.0/30.0
+Goal: The goal of this evaluation is to test overall solution efficiency.
+Reference: This Test fails when: the solution is slow and inefficient.
+
