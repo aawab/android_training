@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.URLUtil;
 
 import androidx.annotation.NonNull;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 import vandy.mooc.aad2.assignment.R;
 import vandy.mooc.aad2.framework.application.activities.GalleryActivityBase;
+import vandy.mooc.aad2.framework.utils.ViewUtils;
 
 import static vandy.mooc.aad2.framework.utils.UriUtils.*;
 import static vandy.mooc.aad2.framework.utils.ViewUtils.showToast;
@@ -58,18 +60,17 @@ public class GalleryActivity
         // See this guide if you have any difficulties.
         // https://developer.android.com/training/basics/firstapp/starting-activity.html
 
-        // TODO - you fill in here.
-        
-
+        // TODO - FINISHED
+        Intent intent = new Intent(context,context.getClass());
         // Put the received list of input URLs as an intent
         // use putParcelableArrayListExtra(String, ArrayList<Uri>) on the intent
         // using the predefined INTENT_EXTRA_URLS extra name.
-        // TODO - you fill in here.
-        
+        // TODO - finished
+        intent.putParcelableArrayListExtra(INTENT_EXTRA_URLS,inputUrls);
 
         // Return the intent.
-        // TODO - you fill in here replacing null with the appropriate value.
-        return null;
+        // TODO - finished
+        return intent;
     }
 
     /*
@@ -94,8 +95,12 @@ public class GalleryActivity
             // starting intent and pass these URLs into the super class using
             // the setItems() helper method.
 
-            // TODO - you fill in here.
-            
+            // TODO - FINISHED
+            List<Uri> list = extractInputUrlsFromIntent(getIntent());
+            if(list!=null) super.setItems(list);
+        }
+        else{
+
         }
     }
 
@@ -111,8 +116,11 @@ public class GalleryActivity
         // Next, validate the extracted list URL strings by calling the local
         // validateInput() helper method. If the entire list of received URLs
         // are valid, then return this list. Otherwise return an empty list.
-        // TODO - you fill in here replacing this statement with your solution.
-        return null;
+        // TODO - FINISHED
+        if(validateInput(intent.getParcelableArrayListExtra(INTENT_EXTRA_URLS))){
+            return intent.getParcelableArrayListExtra(INTENT_EXTRA_URLS);
+        }
+        else return null;
     }
 
     /**
@@ -138,8 +146,21 @@ public class GalleryActivity
         //
         // Return true if all the URLs are valid.
 
-        // TODO - you fill in here replacing this statement with you solution.
-        return false;
+        // TODO - Finished.
+        if(inputUrls==null) {
+            ViewUtils.showToast(getApplicationContext(),"R.string.input_url_list_is_null");
+            return false;
+        }
+        else if(inputUrls.size()==0){
+            ViewUtils.showToast(getApplicationContext(),"R.string.input_url_list_is_empty");
+            return false;
+        }
+        else{
+            for(Uri u:inputUrls){
+                if(!URLUtil.isValidUrl(u.toString())) return false;
+            }
+        }
+        return true;
     }
 
     /**
