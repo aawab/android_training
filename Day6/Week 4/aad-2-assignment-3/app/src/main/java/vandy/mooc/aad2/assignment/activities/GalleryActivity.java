@@ -4,21 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 import android.webkit.URLUtil;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import vandy.mooc.aad2.assignment.R;
 import vandy.mooc.aad2.assignment.downloader.HaMeRDownloader;
 import vandy.mooc.aad2.framework.application.activities.GalleryActivityBase;
+import vandy.mooc.aad2.framework.utils.UriUtils;
 import vandy.mooc.aad2.framework.utils.ViewUtils;
-
-import static java.util.Collections.*;
-import static vandy.mooc.aad2.framework.utils.UriUtils.*;
-import static vandy.mooc.aad2.framework.utils.ViewUtils.*;
 
 /**
  * This activity class contains helper methods to support different was you can
@@ -52,15 +52,14 @@ public class GalleryActivity
      * @param inputUrls A list list of input URLs to include as intent extras.
      * @return An intent that can be used to start this activity
      */
-    public static Intent makeStartIntent(
-            Context context,
-            ArrayList<Uri> inputUrls) {
+    public static Intent makeStartIntent( Context context, ArrayList<Uri> inputUrls) {
         // Create a new intent for starting this activity
         // using the passed context along with the class identifier
         // for this class.
         // See this guide if you have any difficulties.
         // https://developer.android.com/training/basics/firstapp/starting-activity.html
         Intent intent = new Intent(context,context.getClass());
+        
 
         // Put the received list of input URLs as an intent
         // use putParcelableArrayListExtra(String, ArrayList<Uri>) on the intent
@@ -86,14 +85,23 @@ public class GalleryActivity
         // When savedInstanceState is null, the activity is being started for
         // the first time, and when not null, the activity is being recreated
         // after a configuration change.
+        //noinspection StatementWithEmptyBody
         if (savedInstanceState == null) {
             // The activity is being started for the first time.
 
             // Call local help method to extract the URLs from the activity's
             // starting intent and pass these URLs into the super class using
             // the setItems() helper method.
-            List<Uri> list= extractInputUrlsFromIntent(getIntent());
+            ArrayList<Uri> list= getIntent().getParcelableArrayListExtra(INTENT_EXTRA_URLS);
             super.setItems(list);
+            
+        } else {
+            // The activity is being recreated after configuration change.
+            // You can restore your activity's saved state from the passed
+            // savedInstanceState either here or in onRestoreInstanceState().
+            // This framework will automatically save and restore the
+            // displayed URL list using onSaveInstanceState() and
+            // onRestoreInstanceState() so you don't need to do anything here.
         }
 
         // Call base class helper method to register your downloader
@@ -107,14 +115,15 @@ public class GalleryActivity
      *
      * @return A list of image URLs.
      */
+    @SuppressWarnings("unchecked")
     private List<Uri> extractInputUrlsFromIntent(Intent intent) {
         // First extract the list of input urls from the passed
         // intent extras using the provided INTENT_EXTRA_URLS name string.
         // Next, validate the extracted list URL strings by calling the local
         // validateInput() helper method. If the entire list of received URLs
         // are valid, then return this list. Otherwise return null.
-        ArrayList<Uri> urls = intent.getParcelableArrayListExtra(INTENT_EXTRA_URLS);
-        if(validateInput(urls)) return urls;
+        ArrayList<Uri> list= intent.getParcelableArrayListExtra(INTENT_EXTRA_URLS);
+        if(validateInput(list)) return list;
         else return null;
     }
 
@@ -140,10 +149,9 @@ public class GalleryActivity
         // return false.
         //
         // Return true if all the URLs are valid.
-
         if(inputUrls==null) ViewUtils.showToast(getApplicationContext(),R.string.input_url_list_is_null);
         else if(inputUrls.size()==0) ViewUtils.showToast(getApplicationContext(),R.string.input_url_list_is_empty);
-        else {
+        else{
             for(Uri u:inputUrls){
                 if(!URLUtil.isValidUrl(u.toString())) return false;
             }
@@ -153,44 +161,46 @@ public class GalleryActivity
 
     /**
      * Factory method that creates and returns a results (data) intent that
-     * contains the list of downloaded image URIs. This intent can then be
-     * passed to this activity's setResult() method which will inform the
-     * application framework to return this intent to the parent activity.
+     * contains the list of downloaded image URLs. This intent can then be sent
+     * as a broadcast intent to a BroadcastReceiver.
      * <p/>
      * Note: this method is declared public for integration tests.
      *
-     * @param outputUrls A List of local image URLs to add as an intent extra.
-     * @return An intent to return the parent activity
+     * @param urls The current list of image URLs to add as an intent extra.
+     * @return An intent suitable for sending in a broadcast.
      */
-    @SuppressWarnings("WeakerAccess")
-    protected Intent makeResultIntent(ArrayList<Uri> outputUrls) {
-        // create a new data intent, put the received
-        // outputUrls list into the intent as an ParcelableArrayListExtra,
-        // and return the intent.
-        return new Intent(this,GalleryActivity.class).putParcelableArrayListExtra(INTENT_EXTRA_URLS,outputUrls);
+    protected Intent makeBroadcastIntent(@NonNull ArrayList<Uri> urls) {
+        // Create a new data intent.
+        Intent data = new Intent();
+        // Put the received outputUrls list into the intent as an
+        // ParcelableArrayListExtra.
+        data.putParcelableArrayListExtra(INTENT_EXTRA_URLS,urls);
+        // Set the intent action to ACTION_VIEW_LOCAL as is
+        // expected by the MainActivity's BroadcastReceiver implementation.
+        data.setAction(MainActivity.ACTION_VIEW_LOCAL);
+        //  Return the intent.
+        return data;
     }
 
     /**
-     * Creates a data results intent, sets the activity result to this intent,
-     * and finishes this activity.
+     * Creates a data results intent, broadcasts this the intent intent (to the
+     * MainActivity), and finishes this activity.
      *
-     * @param urls The currently displayed list of image URLs.
+     * @param outputUrls A list of local image URLs to broadcast.
      */
-    protected void createAndReturnResultsIntent(
-            @NonNull ArrayList<Uri> urls) {
-        Log.d(TAG, "Setting a result intent.");
+    protected void createAndBroadcastResultsIntent(@NonNull ArrayList<Uri> outputUrls) {
+        Log.d(TAG, "Sending a broadcast Intent.");
 
-        // Call makeResultIntent to construct a return
-        // intent that contains the list of currently displayed URLs
-        // as an intent extra.
-        Intent intent = makeResultIntent(urls);
-
-        // Now set the result intent to return.
-        setResult(RESULT_OK,intent);
+        // Call makeBroadcastIntent to construct an intent
+        // that can be used to broadcast the downloaded image list to
+        // a BroadcastReceiver (the MainActivity).
+        Intent intent = makeBroadcastIntent(outputUrls);
+        // Call the Activity class helper method to
+        // send this intent in a local broadcast to the main activity.
+        sendBroadcast(intent);
         // Call an Activity method to end this activity and return
         // to parent activity.
-        finish();
-
+        finishActivity(RESULT_OK);
         Log.d(TAG, "Activity finished.");
     }
 }

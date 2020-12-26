@@ -1,12 +1,18 @@
 package vandy.mooc.aad2.assignment.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import android.util.Log;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import vandy.mooc.aad2.assignment.R;
 import vandy.mooc.aad2.framework.application.activities.MainActivityBase;
@@ -35,11 +41,21 @@ public class MainActivity extends MainActivityBase {
      */
     @SuppressWarnings({"WeakerAccess", "unused"})
     public static final int DOWNLOAD_REQUEST_CODE = 2;
-
+    /**
+     * Id used by this classes broadcast receiver to identify a recognized
+     * broadcast event.
+     */
+    public static final String ACTION_VIEW_LOCAL = "ActionViewLocalBroadcast";
     /**
      * String used in logging output.
      */
     private static final String TAG = "MainActivity";
+    /**
+     * An instance of a local broadcast receiver implementation that receives a
+     * broadcast intent containing a list of local image URLs and then displays
+     * the first image from this list in the layout's ImageView.
+     */
+    private BroadcastReceiver mBroadcastReceiver;
 
     /*
      * Activity lifecycle callback methods.
@@ -60,6 +76,36 @@ public class MainActivity extends MainActivityBase {
         // super class implementation will automatically load the XML layout for
         // this activity.
         super.onCreate(savedInstanceState);
+
+        // Call local helper method to setup a broadcast receiver
+        // that will receive and display a list  of local image URLs.
+        setupBroadcastReceiver();
+    }
+
+    /**
+     * Hook method called when an activity is about to be destroyed.
+     */
+    @Override
+    protected void onDestroy() {
+        // Unregister the broadcast receiver.
+        unregisterReceiver(mBroadcastReceiver);
+
+        // Always call super method.
+        super.onDestroy();
+        
+    }
+
+
+    /**
+     * Template method hook method required fro starting a download operation.
+     *
+     * @param urls list of URLs to download.
+     */
+    @Override
+    protected void startDownload(ArrayList<Uri> urls) {
+        // Start the Gallery Activity with the passed in Uri(s)
+        startActivity(GalleryActivity.makeStartIntent(this,urls));
+        
     }
 
     /**
@@ -70,8 +116,33 @@ public class MainActivity extends MainActivityBase {
      */
     @Override
     protected void startDownloadForResult(ArrayList<Uri> urls) {
-        // Start the Gallery Activity for result with the passed in Uri(s)
+        // Start the Gallery Activity for result with the passed in Uris(s).
         startActivityForResult(GalleryActivity.makeStartIntent(this,urls),DOWNLOAD_REQUEST_CODE);
+    }
+
+    /**
+     * Template method hook method required fro starting a download
+     * operation.
+     * @param urls list of URLs to download.
+     */
+
+    /**
+     * Creates a broadcast receiver instance that will receive a data intent
+     * from the DownloadImages activity. This intent will contain a list of
+     * downloaded images to display. The current assignment version simply
+     * displays the first image in this list.
+     */
+    private void setupBroadcastReceiver() {
+        // Create a new instance of the local broadcast receiver
+        // class object (defined below).
+        ImageViewBroadcastReceiver receiver = new ImageViewBroadcastReceiver();
+
+        // Create a new broadcast intent filter that will
+        // filter (receive) ACTION_VIEW intents.
+        IntentFilter filter = IntentFilter.create(ACTION_VIEW_LOCAL,"image/*");
+        // Call the Activity class helper method to register
+        // this local receiver instance.
+        registerReceiver(receiver,filter);
     }
 
     /*
@@ -98,26 +169,25 @@ public class MainActivity extends MainActivityBase {
 
         // Check if the request code matches the expected
         // static DOWNLOAD_REQUEST_CODE field value. If so then ...
-            if(requestCode==DOWNLOAD_REQUEST_CODE){
-                // If the result code is RESULT_OK, then
-                // call a local helper method to extract and display the returned
-                // list of image URLs. Otherwise, call the ViewUtils show toast
-                // helper to display the string resource with id
-                // R.string.download_activity_cancelled. In either case, return
-                // without calling the super class method.
-                if(resultCode==RESULT_OK) {
-                    // Extract and display the downloaded images ...
-                    extractAndUpdateUrls(data);
-                    // Return ...
-                }
-                else {
-                    // Show a toast ...
-                    ViewUtils.showToast(getApplicationContext(),R.string.download_activity_cancelled);
-                    // DownloadActivity was not started with correct request code.
-                }
-            }
-        // Allow super class to handle results from unknown origins.
-        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode==DOWNLOAD_REQUEST_CODE) {
+
+            // If the result code is RESULT_OK, then
+            // call a local helper method to extract and display the returned
+            // list of image URLs. Otherwise, call the ViewUtils show toast
+            // helper to display the string resource with id
+            // R.string.download_activity_cancelled. In either case, return
+            // without calling the super class method.
+            // Extract and display the downloaded images ...
+            if (resultCode == RESULT_OK) extractAndUpdateUrls(data);
+            // Show a toast ...
+            else ViewUtils.showToast(this,R.string.download_activity_cancelled);
+            // Return ...
+            // DownloadActivity was not started with correct request code.
+
+
+            // Allow super class to handle results from unknown origins.
+            super.onActivityResult(requestCode,resultCode,data);
+        }
     }
 
     /**
@@ -130,14 +200,14 @@ public class MainActivity extends MainActivityBase {
     private void extractAndUpdateUrls(Intent intent) {
         // Extract the list of downloaded image URLs from the
         // passed intent.
-       ArrayList<Uri> list =intent.getParcelableArrayListExtra(GalleryActivity.INTENT_EXTRA_URLS);
+        ArrayList<Uri> list = intent.getParcelableArrayListExtra(GalleryActivity.INTENT_EXTRA_URLS);
+
         // If the list is empty, call ViewUtils show toast helper
         // to display the string resource R.string.no_images_received.
         if(list.size()==0) ViewUtils.showToast(this,R.string.no_images_received);
 
-        // Always call the base class setItems() helper which will
-        // refresh the layout to display the list contents (or nothing if the
-        // list is empty)
+        // Always call the base class setItems() helper which
+        // will refresh the layout to show the received list of URLs.
         setItems(list);
     }
 
@@ -152,5 +222,29 @@ public class MainActivity extends MainActivityBase {
     @Override
     public void onShowRefresh(boolean notUsed) {
         // this method is not used in this assignment.
+    }
+
+    /**
+     * Custom broadcast receiver that receives and displays a list of local
+     * images identified by an image URL list the is passed as an intent extra.
+     */
+    public class ImageViewBroadcastReceiver
+            extends BroadcastReceiver {
+        /**
+         * Hook method called by the Android ActivityManagerService framework
+         * when a broadcast has been sent.
+         *
+         * @param context The caller's context.
+         * @param intent  An intent containing a list of local image URLs.
+         */
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "Broadcast receiver onReceive() called.");
+
+            // call helper method to extract and display
+            // the received list of image URLs.
+            extractAndUpdateUrls(intent);
+            
+        }
     }
 }
