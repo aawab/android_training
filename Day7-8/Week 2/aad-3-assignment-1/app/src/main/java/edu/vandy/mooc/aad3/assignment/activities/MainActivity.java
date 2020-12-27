@@ -135,17 +135,15 @@ public class MainActivity extends CustomLoggingActivityBase {
     protected void onResume() {
         super.onResume();
         // Create an IntentFilter. The filter's action is BROADCAST_ACTION
-        // TODO - you fill in here.
-        
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(DownloadStateReceiver.BROADCAST_ACTION);
 
         // Instantiates a new DownloadStateReceiver
-        // TODO - you fill in here.
-        
+        DownloadStateReceiver receiver = new DownloadStateReceiver();
 
         // Registers the DownloadStateReceiver and its intent filters via an
         // istance of LocalBroadcastManager
-        // TODO - you fill in here.
-        
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(receiver,filter);
     }
 
 
@@ -187,8 +185,8 @@ public class MainActivity extends CustomLoggingActivityBase {
         // This will involve calling DownloadAtomFeedService's makeIntent.
         // In addition, you will pass REQUEST_YOUTUBE_ENTRIES and
         // the URI parsed version of CNN_YOUTUBE_ATOM_FEED_URL obtained via Uri.parse(...)
-        // TODO - you fill in here.
-        
+       Intent intent = new Intent(DownloadAtomFeedService.makeIntent(this,
+               REQUEST_YOUTUBE_ENTRIES,Uri.parse(CNN_YOUTUBE_ATOM_FEED_URL)));
 
         Log.d(TAG,
                 "starting the DownloadAtomFeedService for "
@@ -199,8 +197,7 @@ public class MainActivity extends CustomLoggingActivityBase {
         viewFlipper.setDisplayedChild(mProgressFlipperIndex);
 
         // call startService on that Intent.
-        // TODO - you fill in here.
-        
+        startService(intent);
     }
 
     /**
@@ -332,8 +329,7 @@ public class MainActivity extends CustomLoggingActivityBase {
 
             // call startDownload(...) with the Uri version of
             // CNN_YOUTUBE_ATOM_FEED_URL
-            // TODO - you fill in here.
-            
+            startDownload(Uri.parse(CNN_YOUTUBE_ATOM_FEED_URL));
         });
     }
 
@@ -372,20 +368,19 @@ public class MainActivity extends CustomLoggingActivityBase {
 
         // create an 'int' with the name 'resultCode' via calling
         // DownloadAtomFeedService's getDownloadResultsCode(Bundle) method.
-        // TODO - you fill in here.
-        
+        int resultCode = DownloadAtomFeedService.getDownloadResultsCode(data);
 
         // check if resultCode = Activity.RESULT_CANCELED, if it does, then call
-        // handleDownloadFailure and return;
-        // TODO - you fill in here.
-        
+        // handleDownloadFailure and return
+        if(resultCode==Activity.RESULT_CANCELED)handleDownloadFailure(data);
 
         // Otherwise **resultCode == Activity.RESULT_OK**
         // Handle a successful download.
         // Log to both the on-screen & logcat logs the requestUri from the data.
         // TODO - you fill in here.
-        
-
+        else if(resultCode== Activity.RESULT_OK) startDownload(Uri.parse(DownloadAtomFeedService
+                .getRequestUri(data).toString()));
+        initalizeLogging();
         // Get the Entries from the 'data' and store them.
         // Log to the on-screen and logcat logs the number of entries downloaded.
         // TODO - you fill in here.
