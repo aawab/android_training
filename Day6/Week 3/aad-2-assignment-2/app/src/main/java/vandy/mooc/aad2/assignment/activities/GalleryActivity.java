@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.URLUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import vandy.mooc.aad2.assignment.R;
 import vandy.mooc.aad2.assignment.downloader.HaMeRDownloader;
 import vandy.mooc.aad2.framework.application.activities.GalleryActivityBase;
+import vandy.mooc.aad2.framework.utils.ViewUtils;
 
 import static java.util.Collections.*;
 import static vandy.mooc.aad2.framework.utils.UriUtils.*;
@@ -58,17 +60,14 @@ public class GalleryActivity
         // for this class.
         // See this guide if you have any difficulties.
         // https://developer.android.com/training/basics/firstapp/starting-activity.html
-        // TODO - FINISHED
         Intent intent = new Intent(context,context.getClass());
 
         // Put the received list of input URLs as an intent
         // use putParcelableArrayListExtra(String, ArrayList<Uri>) on the intent
         // using the predefined INTENT_EXTRA_URLS extra name.
-        // TODO - FINISHED
         intent.putParcelableArrayListExtra(INTENT_EXTRA_URLS,inputUrls);
 
         // Return the intent.
-        // TODO - FINISHED
         return intent;
     }
 
@@ -93,15 +92,13 @@ public class GalleryActivity
             // Call local help method to extract the URLs from the activity's
             // starting intent and pass these URLs into the super class using
             // the setItems() helper method.
-            // TODO - you fill in here.
             List<Uri> list= extractInputUrlsFromIntent(getIntent());
             super.setItems(list);
         }
 
         // Call base class helper method to register your downloader
         // implementation class.
-        // TODO - you fill in here.
-        super.registerDownloader(HaMeRDownloader.class);
+        registerDownloader(HaMeRDownloader.class);
     }
 
     /**
@@ -116,8 +113,9 @@ public class GalleryActivity
         // Next, validate the extracted list URL strings by calling the local
         // validateInput() helper method. If the entire list of received URLs
         // are valid, then return this list. Otherwise return null.
-        // TODO - you fill in here replacing this statement with you solution.
-        return null;
+        ArrayList<Uri> urls = intent.getParcelableArrayListExtra(INTENT_EXTRA_URLS);
+        if(validateInput(urls)) return urls;
+        else return null;
     }
 
     /**
@@ -143,8 +141,14 @@ public class GalleryActivity
         //
         // Return true if all the URLs are valid.
 
-        // TODO - you fill in here replacing this statement with you solution.
-        return false;
+        if(inputUrls==null) ViewUtils.showToast(getApplicationContext(),R.string.input_url_list_is_null);
+        else if(inputUrls.size()==0) ViewUtils.showToast(getApplicationContext(),R.string.input_url_list_is_empty);
+        else {
+            for(Uri u:inputUrls){
+                if(!URLUtil.isValidUrl(u.toString())) return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -163,8 +167,7 @@ public class GalleryActivity
         // create a new data intent, put the received
         // outputUrls list into the intent as an ParcelableArrayListExtra,
         // and return the intent.
-        // TODO - you fill in here replacing this statement with you solution.
-        return null;
+        return new Intent(this,GalleryActivity.class).putParcelableArrayListExtra(INTENT_EXTRA_URLS,outputUrls);
     }
 
     /**
@@ -180,17 +183,13 @@ public class GalleryActivity
         // Call makeResultIntent to construct a return
         // intent that contains the list of currently displayed URLs
         // as an intent extra.
-        // TODO - you fill in here.
-        
+        Intent intent = makeResultIntent(urls);
 
         // Now set the result intent to return.
-        // TODO - you fill in here.
-        
-
+        setResult(RESULT_OK,intent);
         // Call an Activity method to end this activity and return
         // to parent activity.
-        // TODO - you fill in here.
-        
+        finish();
 
         Log.d(TAG, "Activity finished.");
     }

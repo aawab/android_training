@@ -71,8 +71,7 @@ public class MainActivity extends MainActivityBase {
     @Override
     protected void startDownloadForResult(ArrayList<Uri> urls) {
         // Start the Gallery Activity for result with the passed in Uri(s)
-        // TODO - FINISHED
-        startActivity(GalleryActivity.makeStartIntent(this,urls));
+        startActivityForResult(GalleryActivity.makeStartIntent(this,urls),DOWNLOAD_REQUEST_CODE);
     }
 
     /*
@@ -99,7 +98,6 @@ public class MainActivity extends MainActivityBase {
 
         // Check if the request code matches the expected
         // static DOWNLOAD_REQUEST_CODE field value. If so then ...
-        // TODO -- FINISHED
             if(requestCode==DOWNLOAD_REQUEST_CODE){
                 // If the result code is RESULT_OK, then
                 // call a local helper method to extract and display the returned
@@ -107,24 +105,18 @@ public class MainActivity extends MainActivityBase {
                 // helper to display the string resource with id
                 // R.string.download_activity_cancelled. In either case, return
                 // without calling the super class method.
-                // TODO -- FINISHED
                 if(resultCode==RESULT_OK) {
                     // Extract and display the downloaded images ...
-                    // TODO -- FINISHED
                     extractAndUpdateUrls(data);
                     // Return ...
-                    // TODO -- FINISHED
                 }
                 else {
                     // Show a toast ...
-                    // TODO -- FINISHED
                     ViewUtils.showToast(getApplicationContext(),R.string.download_activity_cancelled);
                     // DownloadActivity was not started with correct request code.
-                    // TODO -- FINISHED
                 }
             }
         // Allow super class to handle results from unknown origins.
-        // TODO -- FINISHED
         super.onActivityResult(requestCode,resultCode,data);
     }
 
@@ -138,18 +130,15 @@ public class MainActivity extends MainActivityBase {
     private void extractAndUpdateUrls(Intent intent) {
         // Extract the list of downloaded image URLs from the
         // passed intent.
-        // TODO - you fill in here.
-       intent.getParcelableArrayListExtra(intent.getDataString());
+       ArrayList<Uri> list =intent.getParcelableArrayListExtra(GalleryActivity.INTENT_EXTRA_URLS);
         // If the list is empty, call ViewUtils show toast helper
         // to display the string resource R.string.no_images_received.
-        // TODO - you fill in here.
-        
+        if(list.size()==0) ViewUtils.showToast(this,R.string.no_images_received);
 
         // Always call the base class setItems() helper which will
         // refresh the layout to display the list contents (or nothing if the
         // list is empty)
-        // TODO - you fill in here.
-        
+        setItems(list);
     }
 
 
