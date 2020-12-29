@@ -1,0 +1,108 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="vandy.mooc.aad_2_assignment_2"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="23"
+8-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="30" />
+9-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:7:5-66
+11-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:7:22-64
+12    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+12-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:8:5-79
+12-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:8:22-77
+13    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+13-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:9:5-80
+13-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:9:22-78
+14    <!-- For unit testing we disable animations for more reliable results -->
+15    <uses-permission android:name="android.permission.SET_ANIMATION_SCALE" />
+15-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:11:5-12:47
+15-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:11:22-75
+16
+17    <application
+17-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:14:5-55:19
+18        android:name="vandy.mooc.aad2.framework.application.DownloadApplication"
+18-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:15:9-81
+19        android:allowBackup="true"
+19-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:16:9-35
+20        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+20-->[androidx.core:core:1.1.0] C:\Users\aawab\.gradle\caches\transforms-2\files-2.1\76f2b6439d16df60df3177021482ee5a\core-1.1.0\AndroidManifest.xml:24:18-86
+21        android:debuggable="true"
+22        android:extractNativeLibs="false"
+23        android:icon="@mipmap/ic_launcher"
+23-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:17:9-43
+24        android:label="@string/app_name"
+24-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:18:9-41
+25        android:supportsRtl="true"
+25-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:19:9-35
+26        android:testOnly="true"
+27        android:theme="@style/AppTheme"
+27-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:20:9-40
+28        android:usesCleartextTraffic="true" >
+28-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:21:9-44
+29        <activity
+29-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:23:9-33:20
+30            android:name="vandy.mooc.aad2.assignment.activities.MainActivity"
+30-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:24:13-78
+31            android:label="@string/app_name"
+31-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:25:13-45
+32            android:theme="@style/AppTheme.NoActionBar"
+32-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:26:13-56
+33            android:windowSoftInputMode="adjustResize" >
+33-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:27:13-55
+34            <intent-filter>
+34-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:28:13-32:29
+35                <action android:name="android.intent.action.MAIN" />
+35-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:29:17-68
+35-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:29:25-66
+36
+37                <category android:name="android.intent.category.LAUNCHER" />
+37-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:31:17-76
+37-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:31:27-74
+38            </intent-filter>
+39        </activity>
+40        <activity
+40-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:34:9-38:20
+41            android:name="vandy.mooc.aad2.assignment.activities.GalleryActivity"
+41-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:35:13-81
+42            android:label="@string/title_activity_gallery"
+42-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:36:13-59
+43            android:theme="@style/AppTheme.NoActionBar" >
+43-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:37:13-56
+44        </activity>
+45        <activity
+45-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:39:9-43:20
+46            android:name="vandy.mooc.aad2.framework.application.activities.PagedActivity"
+46-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:40:13-90
+47            android:label="@string/title_activity_details"
+47-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:41:13-59
+48            android:theme="@style/AppTheme.NoActionBar" >
+48-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:42:13-56
+49        </activity>
+50
+51        <!-- android:authority must be unique for each assignment -->
+52        <provider
+52-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:46:9-54:20
+53            android:name="androidx.core.content.FileProvider"
+53-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:47:13-62
+54            android:authorities="vandy.mooc.aad2.assignment2.fileprovider"
+54-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:48:13-75
+55            android:exported="false"
+55-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:49:13-37
+56            android:grantUriPermissions="true" >
+56-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:50:13-47
+57            <meta-data
+57-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:51:13-53:53
+58                android:name="android.support.FILE_PROVIDER_PATHS"
+58-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:52:17-67
+59                android:resource="@xml/file_paths" />
+59-->C:\Users\aawab\Documents\HKP\android_training\Day6\Week 3\aad-2-assignment-2\app\src\main\AndroidManifest.xml:53:17-51
+60        </provider>
+61    </application>
+62
+63</manifest>

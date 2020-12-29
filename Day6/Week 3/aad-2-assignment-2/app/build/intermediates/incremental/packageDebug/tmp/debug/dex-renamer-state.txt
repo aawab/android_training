@@ -1,0 +1,7 @@
+#Mon Dec 28 20:01:00 EST 2020
+base.0=C\:\\Users\\aawab\\Documents\\HKP\\android_training\\Day6\\Week 3\\aad-2-assignment-2\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+path.1=classes.dex
+renamed.1=classes2.dex
+path.0=classes.dex
+renamed.0=classes.dex
+base.1=C\:\\Users\\aawab\\Documents\\HKP\\android_training\\Day6\\Week 3\\aad-2-assignment-2\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\classes.dex

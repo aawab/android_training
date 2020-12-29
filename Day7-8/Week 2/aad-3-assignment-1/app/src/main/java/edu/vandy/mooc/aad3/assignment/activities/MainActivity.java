@@ -47,6 +47,7 @@ import edu.vandy.mooc.aad3.framework.common.logger.Log;
 import edu.vandy.mooc.aad3.framework.common.logger.LogFragment;
 import edu.vandy.mooc.aad3.framework.common.logger.LogWrapper;
 import edu.vandy.mooc.aad3.framework.common.logger.MessageOnlyLogFilter;
+import edu.vandy.mooc.aad3.framework.fragments.RecyclerViewFragment;
 import edu.vandy.mooc.aad3.framework.orm.Entry;
 
 /**
@@ -126,8 +127,7 @@ public class MainActivity extends CustomLoggingActivityBase {
     @Override
     protected void onPause() {
         // via the LocalBroadcastManager, unregister the receiver currently registered.
-        
-
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mDownloadStateReceiver);
         super.onPause();
     }
 
@@ -135,15 +135,14 @@ public class MainActivity extends CustomLoggingActivityBase {
     protected void onResume() {
         super.onResume();
         // Create an IntentFilter. The filter's action is BROADCAST_ACTION
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(DownloadStateReceiver.BROADCAST_ACTION);
+        IntentFilter filter = new IntentFilter(DownloadStateReceiver.BROADCAST_ACTION);
 
         // Instantiates a new DownloadStateReceiver
         DownloadStateReceiver receiver = new DownloadStateReceiver();
 
         // Registers the DownloadStateReceiver and its intent filters via an
         // istance of LocalBroadcastManager
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(receiver,filter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,filter);
     }
 
 
@@ -377,18 +376,17 @@ public class MainActivity extends CustomLoggingActivityBase {
         // Otherwise **resultCode == Activity.RESULT_OK**
         // Handle a successful download.
         // Log to both the on-screen & logcat logs the requestUri from the data.
-        // TODO - you fill in here.
-        else if(resultCode== Activity.RESULT_OK) startDownload(Uri.parse(DownloadAtomFeedService
-                .getRequestUri(data).toString()));
-        initalizeLogging();
+        else if(resultCode== Activity.RESULT_OK) {
+            startDownload(Uri.parse(DownloadAtomFeedService
+                    .getRequestUri(data).toString()));
+            Log.d("DEBUG",DownloadAtomFeedService.getRequestUri(data).toString());
+        }
+
         // Get the Entries from the 'data' and store them.
         // Log to the on-screen and logcat logs the number of entries downloaded.
-        // TODO - you fill in here.
-        
-
+        ArrayList<Entry> list=  DownloadAtomFeedService.getEntries(data);
         // Update the RecyclerView fragment via calling updateEntries(...) on it.
-        // TODO - you fill in here.
-        
+        updateEntriesInterface.updateEntries(list);
     }
 
     /**
@@ -409,8 +407,7 @@ public class MainActivity extends CustomLoggingActivityBase {
             // instance of MainActivity currently running that the service has returned
             // the results via the BroadcastReceiver. Note: Intent.getExtras will return the
             // Bundle stored with putExtras(Bundle)
-            // TODO - you fill in here.
-            
+            MainActivity.this.serviceIntentReceived(intent.getExtras());
         }
     }
 
@@ -423,8 +420,7 @@ public class MainActivity extends CustomLoggingActivityBase {
     public static Intent makeBroadcastReceiverIntent() {
         // Create a new Intent. Then call 'setAction' on it, passing the 'BROADCAST_ACTION'
         // variable from the DownloadStateReceiver class. Then return the new Intent.
-        // TODO - you fill in here replacing the following statement with your solution.
-        return null;
+        return  new Intent(DownloadStateReceiver.BROADCAST_ACTION);
     }
 
     /**

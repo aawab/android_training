@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.webkit.URLUtil;
+import android.widget.Gallery;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class GalleryActivity
         // for this class.
         // See this guide if you have any difficulties.
         // https://developer.android.com/training/basics/firstapp/starting-activity.html
-        Intent intent = new Intent(context,context.getClass());
+        Intent intent = new Intent(context, GalleryActivity.class);
         
 
         // Put the received list of input URLs as an intent
@@ -92,7 +93,7 @@ public class GalleryActivity
             // Call local help method to extract the URLs from the activity's
             // starting intent and pass these URLs into the super class using
             // the setItems() helper method.
-            ArrayList<Uri> list= getIntent().getParcelableArrayListExtra(INTENT_EXTRA_URLS);
+            List<Uri> list= extractInputUrlsFromIntent(getIntent());
             super.setItems(list);
             
         } else {
