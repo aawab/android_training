@@ -213,6 +213,7 @@ public class MainActivity extends CustomLoggingActivityBase implements ServiceRe
 		// Update the RecyclerView fragment via calling updateEntries(...) on it.
 		// TODO - finished.
 		updateEntriesInterface.updateEntries(list);
+		stopService(getIntent());
 	}
 
 	/**

@@ -188,9 +188,9 @@ public class MainActivity extends CustomLoggingActivityBase implements ServiceRe
      */
     private void startDownload(Uri url) {
         // Create an intent to download the YouTube Atom Feed for CNN.
-        // TODO - you fill in here.
-        
-
+        // TODO - finished.
+        Intent intent = DownloadAtomFeedService.makeIntent(this,
+                REQUEST_YOUTUBE_ENTRIES,url,mServiceResultHandler);
         Log.d(TAG,
                 "starting the DownloadAtomFeedService for "
                         + url.toString()
@@ -200,8 +200,8 @@ public class MainActivity extends CustomLoggingActivityBase implements ServiceRe
         viewFlipper.setDisplayedChild(mProgressFlipperIndex);
 
         // call startService on that Intent.
-        // TODO - you fill in here.
-        
+        // TODO - finished.
+        startService(intent);
     }
 
     /**
@@ -223,19 +223,25 @@ public class MainActivity extends CustomLoggingActivityBase implements ServiceRe
 
         // check if resultCode = Activity.RESULT_CANCELED, if it does, then call
         // handleDownloadFailure and return;
-        // TODO - you fill in here.
-        
+        // TODO - finished.
+        if(resultCode==Activity.RESULT_CANCELED) handleDownloadFailure(data);
 
         // Otherwise **resultCode == Activity.RESULT_OK**
         // Handle a successful download.
         // Log to both the on-screen & logcat logs the requestUri from the data.
-        // TODO - you fill in here.
+        // TODO - finished.
+        else if(resultCode==Activity.RESULT_OK) {
+            startDownload(Uri.parse(CNN_YOUTUBE_ATOM_FEED_URL));
+            Log.d(TAG, "starting download for Youtube Atom Feed for"
+                    + DownloadAtomFeedService.getRequestUri(data));
+        }
         
 
         // Get the Entries from the 'data' and store them.
         // Log to the on-screen and logcat logs the number of entries downloaded.
-        // TODO - you fill in here.
-        
+        // TODO - finished.
+        ArrayList<Entry> entries= DownloadAtomFeedService.getEntries(data);
+        Log.d(TAG,entries.size()+" entries downloaded.");
 
         // Update the database provider entries in a new background thread.
         new Thread() {
@@ -243,14 +249,16 @@ public class MainActivity extends CustomLoggingActivityBase implements ServiceRe
             public void run() {
                 // Update the provider entries by calling the ProviderUtils
                 // deleteProviderContents and addEntriesToProvider helper methods.
-                // TODO - you fill in here.
+                // TODO - finished.
+                ProviderUtils.deleteProviderContents(getApplicationContext());
+                ProviderUtils.addEntriesToProvider(getApplicationContext(),entries);
                 
             }
         }.start();
 
         // Update the RecyclerView fragment via calling updateEntries(...) on it.
-        // TODO - you fill in here.
-        
+        // TODO - finished.
+        updateEntriesInterface.updateEntries(entries);
     }
 
     /**
@@ -284,8 +292,8 @@ public class MainActivity extends CustomLoggingActivityBase implements ServiceRe
 
             // call startDownload(...) with the parsed Uri version of
             // CNN_YOUTUBE_ATOM_FEED_URL
-            // TODO - you fill in here.
-            
+            // TODO - finished.
+            startDownload(Uri.parse(CNN_YOUTUBE_ATOM_FEED_URL));
         });
     }
 

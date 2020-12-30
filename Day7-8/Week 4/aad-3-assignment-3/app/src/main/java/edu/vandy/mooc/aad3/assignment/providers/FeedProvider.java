@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import edu.vandy.mooc.aad3.assignment.activities.MainActivity;
+import edu.vandy.mooc.aad3.assignment.services.DownloadAtomFeedService;
 import edu.vandy.mooc.aad3.framework.provider.FeedContract;
 import edu.vandy.mooc.aad3.framework.provider.FeedDBAdapter;
 
@@ -68,8 +70,10 @@ public class FeedProvider extends ContentProvider {
     @Override
     synchronized public boolean onCreate() {
         // initialize mDB, call open() on it, and return true.
-        // TODO - you fill in here replacing the following statement with your solution.
-        return false;
+        // TODO - finished.
+        mDB=new FeedDBAdapter(getContext());
+        mDB.open();
+        return true;
     }
 
     /**
@@ -85,8 +89,15 @@ public class FeedProvider extends ContentProvider {
         // You will need to use 'mUriMatcher' to match if the Uri matches SingleRow or MultipleRow
         // throw a new 'UnsupportedOperationException("URI: " + uri + " is not supported.")
         // if mUriMatcher returns an unsupported Uri.
-        // TODO - you fill in here replacing the following statement with your solution.
-        return null;
+        // TODO - finished.
+        switch(mUriMatcher.match(uri)){
+            case ALL_ENTRY_ROWS:
+                return FeedContract.Entry.CONTENT_TYPE_DIR;
+            case SINGLE_ENTRY_ROW:
+                return FeedContract.Entry.CONTENT_ITEM_TYPE;
+            default:
+                return("URI: " + uri + " is not supported.");
+        }
     }
 
     /**
@@ -111,29 +122,35 @@ public class FeedProvider extends ContentProvider {
         String updatedSortOrder = sortOrder;
 
         // switch on match() from mUriMatcher
-        // TODO - you fill in here.
-        
-
+        // TODO - finished.
+        switch(mUriMatcher.match(uri)){
             // if SINGLE_ROW & selection is null, then set modifiedSelection to:
             // "_ID = " + uri .getLastPathSegment()
             // else make it:
             // modifiedSelection += " AND " + <the same as above>
-            // TODO - you fill in here.
-            
-
+            // TODO - finished.
+            case SINGLE_ENTRY_ROW :
+                if(selection==null) modifiedSelection="_ID = " + uri.getLastPathSegment();
+                else modifiedSelection+=" AND " + uri.getLastPathSegment();
+                break;
             // if matcher matches ALL_ROWS,
             // if sortOrder is empty, then set new copy of sortOrder to "_ID ASC".
-            // TODO - you fill in here.
-            
-
+            // TODO - finished.
+            case ALL_ENTRY_ROWS:
+                if(sortOrder.isEmpty()) updatedSortOrder="_ID ASC";
+                break;
             // if matcher matches UriMatcher.NO_MATCH or default,
             // then throw new IllegalArgumentException("Invalid URI")
-            // TODO - you fill in here replacing the following statement with your solution.
-        
+            // TODO - finished.
+            case UriMatcher.NO_MATCH:
+                throw new IllegalArgumentException("Invalid URI");
+            default:
+                throw new IllegalArgumentException("Invalid URI");
+        }
 
         // Call private query method with appropriate parameters(including new copy of sortOrder).
-        // TODO - you fill in here replacing this statement with your solution.
-        return null;
+        // TODO -finished.
+        return query(uri,projection,selection,selectionArgs,updatedSortOrder);
     }
 
     /**
@@ -145,16 +162,17 @@ public class FeedProvider extends ContentProvider {
                                       final String[] projection, final String selection,
                                       final String[] selectionArgs, final String sortOrder) {
         // Make a new SQLiteQueryBuilder object.
-        // TODO - you fill in here.
-        
+        // TODO - finished.
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
         // set the table(s) to be queried upon.
-        // TODO - you fill in here.
-        
+        // TODO - finished.
+        queryBuilder.setTables(tableName);
 
         // return the builder.query(....) result, after passing the appropriate values.
-        // TODO - you fill in here replacing the following statement with your solution.
-        return null;
+        // TODO - finished.
+        return queryBuilder.query(mDB.getDB(),projection,selection,selectionArgs,
+                null,null,sortOrder);
     }
 
     /**
@@ -170,44 +188,47 @@ public class FeedProvider extends ContentProvider {
     synchronized public Uri insert(@NonNull Uri uri, ContentValues assignedValues) {
 
         // switch on the results of 'mUriMatcher' matching the Uri passed in,
-        // TODO - you fill in here.
-            
-
+        // TODO - finished.
+        switch(mUriMatcher.match(uri)){
             // if the match equals a PATH TOKEN for ALL ROWS of a table in the FeedContract
-            // TODO - you fill in here.
-            
+            // TODO - finished.
+            case ALL_ENTRY_ROWS:
                 // create a ContentValues, then remove the '_ID' value from it.
-                // TODO - you fill in here.
-                
-
+                // TODO - finished.
+                ContentValues contentValues= assignedValues;
+                contentValues.remove("_ID");
                 // insert the ContentValues into the database adapater instance and store the
                 // returned rowID.
-                // TODO - you fill in here.
-                
-
+                // TODO - finished.
+                long rowID=mDB.insert(mDB.getDB().getPath(),contentValues);
                 // if returned rowID is < 0, then return null.
-                // TODO - you fill in here.
-                
+                // TODO - finished.
+                if(rowID<0) return null;
 
                 // Use ContentUris.withAppendedId(Uri, long) to create a new Uri.
                 // use the appropriate table's CONTENT_URI and the rowID.
-                // TODO - you fill in here.
-                
+                // TODO - finished.
+                Uri notifUri = ContentUris.withAppendedId(FeedContract.Entry.CONTENT_URI,rowID);
 
                 // Call notifyChanges on this, with the new Uri, and a null content observer
                 // This calls notifyChange(Uri, ContentObserver) in setup Activities.
-                // TODO - you fill in here.
-                
+                // TODO - finished.
+                this.notifyChanges(notifUri,null);
 
                 // Return the notification Uri
-                // TODO - you fill in here.
-            
-
-            // in both cases: 1) a Single Row URI was passed, or 2) default case: throw a new
-            //  IllegalArgumentException("Unsupported URI, unable to insert into specific row: "
-            //        + uri);
-            // TODO - you fill in here.
-        return null;
+                // TODO - finished.
+                return notifUri;
+             // in both cases: 1) a Single Row URI was passed, or 2) default case: throw a new
+             //  IllegalArgumentException("Unsupported URI, unable to insert into specific row: "
+             //        + uri);
+             // TODO - finished.
+            case SINGLE_ENTRY_ROW:
+                throw new IllegalArgumentException("Unsupported URI, unable to insert into specific " +
+                        "row: " + uri);
+            default:
+                throw new IllegalArgumentException("Unsupported URI, unable to insert into specific " +
+                        "row: " + uri);
+        }
     }
 
     /**
@@ -223,22 +244,28 @@ public class FeedProvider extends ContentProvider {
 
         // switch on mUriMatcher.match
         // TODO - you fill in here.
-        
-            // if mUriMatcher equals a Single row of table, then modify the whereClause:
-            // If whereClause is null, then set modifiedWhereClause to _ID = last path segement
-            // If whereClause is nonNull, then append " AND " and then the same as above.
-            // do not 'break' at the end of the this switch.('fall though' to the multi-row case)
-            // TODO - you fill in here.
-            
+        switch(mUriMatcher.match(uri)) {
+            case SINGLE_ENTRY_ROW:
+                if (whereClause == null) modifiedWhereClause = uri.getLastPathSegment();
+                else modifiedWhereClause += " AND " + uri.getLastPathSegment();
+            case ALL_ENTRY_ROWS:
+                deleteAndNotify()
+                // if mUriMatcher equals a Single row of table, then modify the whereClause:
+                // If whereClause is null, then set modifiedWhereClause to _ID = last path segement
+                // If whereClause is nonNull, then append " AND " and then the same as above.
+                // do not 'break' at the end of the this switch.('fall though' to the multi-row case)
+                // TODO - you fill in here.
 
-            // if whereClause was modified or mUriMatcher equals ALL ROWS of table, then call
-            // deleteAndNotify with the proper parameters. (including modifiedWhereClause)
-            // TODO - you fill in here.
-            
 
-            // default: throw new IllegalArgumentException("Unsupported URI: " + uri)
-            // TODO - you fill in here replacing this statement with your solution.
-        return -1;
+                // if whereClause was modified or mUriMatcher equals ALL ROWS of table, then call
+                // deleteAndNotify with the proper parameters. (including modifiedWhereClause)
+                // TODO - you fill in here.
+
+
+                // default: throw new IllegalArgumentException("Unsupported URI: " + uri)
+                // TODO - you fill in here replacing this statement with your solution.
+                return -1;
+        }
     }
 
     /*
