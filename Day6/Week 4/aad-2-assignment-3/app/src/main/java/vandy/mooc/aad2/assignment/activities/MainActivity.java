@@ -1,5 +1,8 @@
 package vandy.mooc.aad2.assignment.activities;
 
+
+import android.app.Activity;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -139,7 +142,8 @@ public class MainActivity extends MainActivityBase {
 
         // Create a new broadcast intent filter that will
         // filter (receive) ACTION_VIEW intents.
-        IntentFilter filter = IntentFilter.create(ACTION_VIEW_LOCAL,"image/*");
+        IntentFilter filter = new IntentFilter(ACTION_VIEW_LOCAL);
+
         // Call the Activity class helper method to register
         // this local receiver instance.
         registerReceiver(receiver,filter);

@@ -1,0 +1,28 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\aawab\\Documents\\HKP\\android_training\\Day7-8\\Week 4\\aad-3-assignment-3\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\aawab\\Documents\\HKP\\android_training\\Day7-8\\Week 4\\aad-3-assignment-3\\app\\src\\main\\res\\values-v11\\template-styles.xml",
+                    "from": {
+                        "startLines": "24,20,22,27,29,34",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "768,651,713,849,878,1075",
+                        "endLines": "24,20,22,27,32,39",
+                        "endColumns": "51,60,53,27,12,12",
+                        "endOffsets": "815,707,762,872,1069,1348"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,10",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "55,106,166,219,246,442",
+                        "endLines": "2,3,4,5,9,15",
+                        "endColumns": "50,59,52,26,12,12",
+                        "endOffsets": "101,161,214,241,437,715"
+                    }
+                }
+            ]
+        }
+    ]
+}

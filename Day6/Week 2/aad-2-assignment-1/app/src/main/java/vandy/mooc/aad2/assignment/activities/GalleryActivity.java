@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.URLUtil;
+import android.widget.Gallery;
 
 import androidx.annotation.NonNull;
 
@@ -61,7 +62,7 @@ public class GalleryActivity
         // https://developer.android.com/training/basics/firstapp/starting-activity.html
 
         // TODO - FINISHED
-        Intent intent = new Intent(context,context.getClass());
+        Intent intent = new Intent(context,GalleryActivity.class);
         // Put the received list of input URLs as an intent
         // use putParcelableArrayListExtra(String, ArrayList<Uri>) on the intent
         // using the predefined INTENT_EXTRA_URLS extra name.
@@ -83,6 +84,7 @@ public class GalleryActivity
         // call with a call to inflate the activity's layout from XML, but this
         // is not necessary here because the assignment super class method will
         // do that for you.
+        Log.d("DEBUG","in onCreate()");
         super.onCreate(savedInstanceState);
 
         // When savedInstanceState is null, the activity is being started for
@@ -117,8 +119,9 @@ public class GalleryActivity
         // validateInput() helper method. If the entire list of received URLs
         // are valid, then return this list. Otherwise return an empty list.
         // TODO - FINISHED
-        if(validateInput(intent.getParcelableArrayListExtra(INTENT_EXTRA_URLS))){
-            return intent.getParcelableArrayListExtra(INTENT_EXTRA_URLS);
+        ArrayList<Uri> list = intent.getParcelableArrayListExtra(INTENT_EXTRA_URLS);
+        if(validateInput(list)){
+            return list;
         }
         else return null;
     }
@@ -148,16 +151,16 @@ public class GalleryActivity
 
         // TODO - Finished.
         if(inputUrls==null) {
-            ViewUtils.showToast(getApplicationContext(),"R.string.input_url_list_is_null");
+            ViewUtils.showToast(this,R.string.input_url_list_is_null);
             return false;
         }
         else if(inputUrls.size()==0){
-            ViewUtils.showToast(getApplicationContext(),"R.string.input_url_list_is_empty");
+            ViewUtils.showToast(this,R.string.input_url_list_is_empty);
             return false;
         }
         else{
             for(Uri u:inputUrls){
-                if(!URLUtil.isValidUrl(u.toString())) return false;
+                if(!isValidUrl(u.toString())) return false;
             }
         }
         return true;
