@@ -377,8 +377,6 @@ public class MainActivity extends CustomLoggingActivityBase {
         // Handle a successful download.
         // Log to both the on-screen & logcat logs the requestUri from the data.
         else if(resultCode== Activity.RESULT_OK) {
-            startDownload(Uri.parse(DownloadAtomFeedService
-                    .getRequestUri(data).toString()));
             Log.d("DEBUG",DownloadAtomFeedService.getRequestUri(data).toString());
         }
 

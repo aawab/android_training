@@ -201,7 +201,6 @@ public class MainActivity extends CustomLoggingActivityBase implements ServiceRe
 		// Log to both the on-screen & logcat logs the requestUri from the data.
 		// TODO - finished.
 		else if(resultCode==Activity.RESULT_OK){
-			startDownload(DownloadAtomFeedService.getRequestUri(data));
 			Log.d(TAG,DownloadAtomFeedService.getRequestUri(data).toString());
 		}
 

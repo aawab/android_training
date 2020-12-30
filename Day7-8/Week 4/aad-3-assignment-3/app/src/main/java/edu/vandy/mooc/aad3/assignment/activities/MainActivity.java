@@ -202,6 +202,7 @@ public class MainActivity extends CustomLoggingActivityBase implements ServiceRe
         // call startService on that Intent.
         // TODO - finished.
         startService(intent);
+        stopService(intent);
     }
 
     /**
@@ -231,7 +232,6 @@ public class MainActivity extends CustomLoggingActivityBase implements ServiceRe
         // Log to both the on-screen & logcat logs the requestUri from the data.
         // TODO - finished.
         else if(resultCode==Activity.RESULT_OK) {
-            startDownload(Uri.parse(CNN_YOUTUBE_ATOM_FEED_URL));
             Log.d(TAG, "starting download for Youtube Atom Feed for"
                     + DownloadAtomFeedService.getRequestUri(data));
         }
@@ -259,6 +259,7 @@ public class MainActivity extends CustomLoggingActivityBase implements ServiceRe
         // Update the RecyclerView fragment via calling updateEntries(...) on it.
         // TODO - finished.
         updateEntriesInterface.updateEntries(entries);
+        stopService(getIntent());
     }
 
     /**

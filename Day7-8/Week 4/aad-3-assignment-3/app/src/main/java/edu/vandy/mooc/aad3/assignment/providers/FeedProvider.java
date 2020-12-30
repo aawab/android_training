@@ -96,7 +96,7 @@ public class FeedProvider extends ContentProvider {
             case SINGLE_ENTRY_ROW:
                 return FeedContract.Entry.CONTENT_ITEM_TYPE;
             default:
-                return("URI: " + uri + " is not supported.");
+                throw new UnsupportedOperationException("URI: " + uri + " is not supported.");
         }
     }
 
@@ -136,8 +136,8 @@ public class FeedProvider extends ContentProvider {
             // if matcher matches ALL_ROWS,
             // if sortOrder is empty, then set new copy of sortOrder to "_ID ASC".
             // TODO - finished.
-            case ALL_ENTRY_ROWS:
-                if(sortOrder.isEmpty()) updatedSortOrder="_ID ASC";
+            case ALL_ENTRY_ROWS: 
+                if(sortOrder==null) updatedSortOrder="_ID ASC";
                 break;
             // if matcher matches UriMatcher.NO_MATCH or default,
             // then throw new IllegalArgumentException("Invalid URI")
@@ -150,7 +150,8 @@ public class FeedProvider extends ContentProvider {
 
         // Call private query method with appropriate parameters(including new copy of sortOrder).
         // TODO -finished.
-        return query(uri,projection,selection,selectionArgs,updatedSortOrder);
+        return query(uri,FeedContract.Entry.TABLE_NAME,projection,modifiedSelection,selectionArgs,
+                updatedSortOrder);
     }
 
     /**
@@ -208,7 +209,7 @@ public class FeedProvider extends ContentProvider {
                 // Use ContentUris.withAppendedId(Uri, long) to create a new Uri.
                 // use the appropriate table's CONTENT_URI and the rowID.
                 // TODO - finished.
-                Uri notifUri = ContentUris.withAppendedId(FeedContract.Entry.CONTENT_URI,rowID);
+                Uri notifUri = ContentUris.withAppendedId(uri,rowID);
 
                 // Call notifyChanges on this, with the new Uri, and a null content observer
                 // This calls notifyChange(Uri, ContentObserver) in setup Activities.
@@ -243,28 +244,26 @@ public class FeedProvider extends ContentProvider {
         String modifiedWhereClause = whereClause;
 
         // switch on mUriMatcher.match
-        // TODO - you fill in here.
+        // TODO - finished.
         switch(mUriMatcher.match(uri)) {
+            // if mUriMatcher equals a Single row of table, then modify the whereClause:
+            // If whereClause is null, then set modifiedWhereClause to _ID = last path segement
+            // If whereClause is nonNull, then append " AND " and then the same as above.
+            // do not 'break' at the end of the this switch.('fall though' to the multi-row case)
+            // TODO - finished.
             case SINGLE_ENTRY_ROW:
                 if (whereClause == null) modifiedWhereClause = uri.getLastPathSegment();
                 else modifiedWhereClause += " AND " + uri.getLastPathSegment();
+            // if whereClause was modified or mUriMatcher equals ALL ROWS of table, then call
+            // deleteAndNotify with the proper parameters. (including modifiedWhereClause)
+            // TODO - finished.
             case ALL_ENTRY_ROWS:
-                deleteAndNotify()
-                // if mUriMatcher equals a Single row of table, then modify the whereClause:
-                // If whereClause is null, then set modifiedWhereClause to _ID = last path segement
-                // If whereClause is nonNull, then append " AND " and then the same as above.
-                // do not 'break' at the end of the this switch.('fall though' to the multi-row case)
-                // TODO - you fill in here.
+                return deleteAndNotify(uri,FeedContract.Entry.TABLE_NAME,modifiedWhereClause,whereArgs);
+            // default: throw new IllegalArgumentException("Unsupported URI: " + uri)
+            // TODO - finished.
+            default:
+                throw new IllegalArgumentException("Unsuppoorted URI: " + uri);
 
-
-                // if whereClause was modified or mUriMatcher equals ALL ROWS of table, then call
-                // deleteAndNotify with the proper parameters. (including modifiedWhereClause)
-                // TODO - you fill in here.
-
-
-                // default: throw new IllegalArgumentException("Unsupported URI: " + uri)
-                // TODO - you fill in here replacing this statement with your solution.
-                return -1;
         }
     }
 
@@ -275,13 +274,17 @@ public class FeedProvider extends ContentProvider {
     private int deleteAndNotify(final Uri uri, final String tableName,
                                 final String whereClause, final String[] whereArgs) {
         // call delete on DBAdapter instance, and store the int number or rows deleted.
-        // TODO - you fill in here.
-        
+        // TODO - finished.
+        int rows = mDB.delete(tableName,whereClause,whereArgs);
 
         // if count > 0, then call notifyChange on the Uri provided. (with null observer)
         // then return the count.
-        // TODO - you fill in here replacing the following statement with your solution.
-        return -1;
+        // TODO - finished.
+        if (rows>0){
+            notifyChanges(uri,null);
+            return rows;
+        }
+        return 0;
     }
 
 
@@ -299,28 +302,30 @@ public class FeedProvider extends ContentProvider {
         String modifedWhereClause = whereClause;
 
         // remove "_ID" from the content values.
-        // TODO - you fill in here.
-        
+        // TODO - finished.
+        values.remove("_ID");
 
         // switch based on the uri provided using mUriMatcher
-        // TODO - you fill in here.
-        
-
+        // TODO - finished.
+        switch(mUriMatcher.match(uri)) {
             // if uri matches single row of table, modify whereClause appropriately:
             // If whereClause is null, then set modifiedWhereClause to _ID = last path segement
             // If whereClause is nonNull, then append " AND " and then the same as above.
-            // TODO - you fill in here.
-            
-
+            // TODO - finished.
+            case SINGLE_ENTRY_ROW:
+                if (whereClause == null) modifedWhereClause = uri.getLastPathSegment();
+                else modifedWhereClause += " AND " + uri.getLastPathSegment();
             // if whereClause was modified, or if Uri matches all rows of a table, then call
             // updateAndNotify(...) with appropriate parameters.
-
-            // TODO - you fill in here.
-            
-
+            // TODO - finished.
+            case ALL_ENTRY_ROWS:
+                return updateAndNotify(uri,FeedContract.Entry.TABLE_NAME,values,modifedWhereClause,
+                        whereArgs);
             // default: throw new IllegalArgumentException("Unknown URI " + uri);
-            // TODO - you fill in here replacing the following statement with your solution.
-        return -1;
+            // TODO - finished.
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
     }
 
     /*
@@ -331,13 +336,17 @@ public class FeedProvider extends ContentProvider {
                                 final ContentValues values, final String whereClause,
                                 final String[] whereArgs) {
         // call update(...) on the DBAdapter instance variable, and store the count of rows updated.
-        // TODO - you fill in here.
-        
+        // TODO - finished.
+        int count = mDB.update(tableName,values,whereClause,whereArgs);
 
         // if count > 0 then call notifyChanges(...) on the Uri (null observer), and return the
         // count.
-        // TODO - you fill in here replacing the following statement with your solution.
-        return -1;
+        // TODO - finished.
+        if(count>0){
+            notifyChanges(uri,null);
+            return count;
+        }
+        return 0;
     }
 
     private void notifyChanges(Uri uri, ContentObserver contentObserver) {

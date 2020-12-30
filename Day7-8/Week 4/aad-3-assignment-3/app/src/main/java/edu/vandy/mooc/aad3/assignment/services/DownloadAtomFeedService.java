@@ -97,7 +97,8 @@ public class DownloadAtomFeedService extends IntentService {
         // to the intent so the DownloadAtomFeedService can send the
         // Entry Object back to the Calling Activity
         // TODO - finished.
-        return new Intent().setData(url).putExtra(REQUEST_CODE,requestCode).putExtra(MESSENGER_KEY,
+        Intent intent = new Intent(context,DownloadAtomFeedService.class);
+        return intent.setData(url).putExtra(REQUEST_CODE,requestCode).putExtra(MESSENGER_KEY,
                 new Messenger(downloadHandler));
     }
 
@@ -135,7 +136,11 @@ public class DownloadAtomFeedService extends IntentService {
     public static Uri getRequestUri(Bundle data) {
         // use 'FEED_URL' to extract the string representation of the Uri from the Message
         // TODO - finished.
-        String url = data.get(FEED_URL).toString();
+        String url="";
+        if(data.get(FEED_URL)!=null){
+            url = data.get(FEED_URL).toString();
+        }
+        else throw new NullPointerException("Cannot call toString on a null FEED_URL object");
 
         // Parse the String of the url to get a Uri and return it.
         // TODO - finished.
@@ -270,13 +275,17 @@ public class DownloadAtomFeedService extends IntentService {
         // Put the requestCode into the Bundle via the REQUEST_CODE key.
         // TODO -finished.
         data.putInt(REQUEST_CODE,requestCode);
+        data.putString(FEED_URL,url.toString());
 
         // Set a field in the Message to indicate whether the download
         // succeeded or failed.
         // sucess: Activity.RESULT_OK
         // otherwise: Activity.RESULT_CANCELED
-        // TODO -finished.
-        if(entries==null) message.arg1=Activity.RESULT_OK;
+        // TODO - THIS SHOULD BE != null, but when I do that the looping issues present in the last
+        // few assignments reoccurs. The task keeps repeating but doesn't stop. I've tried doing
+        // stopSelf and stopService(Intent), both here and in mainActivity but neither worked.
+        //When kept as ==null, it always returns RESULT_CANCELED,
+        if(entries!=null) message.arg1=Activity.RESULT_OK;
         else message.arg1=Activity.RESULT_CANCELED;
 
         // Set the Bundle to be the data in the message.
