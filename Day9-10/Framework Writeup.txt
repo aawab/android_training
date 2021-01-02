@@ -1,0 +1,7 @@
+While Java is very useful and easy to apply to multi-platform projects, what it makes up for with
+easier development it lacks in performance in comparison to languages like C++ and the such. When I 
+looked at other frameworks we could use instead, React Native and Flutter caught my eye. One, because
+both were cross-platform and focused on making the app development process easier, and because both are
+being marketed as performance friendly. Flutter in particular catches my eye. Once every one of us finish
+our training and start to understand and become confident in our code, I think we would be excited to pursue
+working with Flutter and React.
