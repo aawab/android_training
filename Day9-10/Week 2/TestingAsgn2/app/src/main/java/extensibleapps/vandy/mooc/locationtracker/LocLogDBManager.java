@@ -60,7 +60,17 @@ public class LocLogDBManager {
             String lon,
             String desc) {
 
-        // TODO | Store the location data in the database
+        // TODO FINISHED | Store the location data in the database
+        String timeK= LocDBContract.FeedEntry.COLUMN_NAME_ENTRY_TIME;
+        String latK = LocDBContract.FeedEntry.COLUMN_NAME_ENTRY_LATITUDE;
+        String lonK = LocDBContract.FeedEntry.COLUMN_NAME_ENTRY_lONGITUDE;
+        String descK = LocDBContract.FeedEntry.COLUMN_NAME_ENTRY_DESCRIPTION;
+        ContentValues values = new ContentValues();
+        values.put(timeK,time);
+        values.put(latK,lat);
+        values.put(lonK,lon);
+        values.put(descK,desc);
+        mDB=mDB.insert(LocDBContract.FeedEntry.TABLE_NAME, null, values);
     }
 
     /**
@@ -72,10 +82,12 @@ public class LocLogDBManager {
             String timeToDelete, String latToDelete,
             String longToDelete, String descToDelete) {
 
-        // TODO | Delete any database entries with the provided params. Return the
-        // TODO | number of rows that are deleted (change the return given below)
-
-        return 0;
+        // TODO FINISSHED| Delete any database entries with the provided params. Return the
+        // TODO FINISHED| number of rows that are deleted (change the return given below)
+        Cursor c = mDB.query(LocDBContract.FeedEntry.TABLE_NAME,new String[]{timeToDelete,
+                latToDelete,longToDelete,descToDelete},null,null,null,null,null);
+        int deleted = mDB.delete(LocDBContract.FeedEntry.TABLE_NAME,c.getPosition(),null);
+        return deleted;
     }
 
     /**
@@ -86,10 +98,10 @@ public class LocLogDBManager {
             String time, String lat,
             String lon, String desc) {
 
-        // TODO | Return a Cursor containing entries with the provided params.
-        // TODO | (change the return given below)
+        // TODO FINISHED| Return a Cursor containing entries with the provided params.
 
-        return null;
+        return mDB.query(LocDBContract.FeedEntry.TABLE_NAME,new String[]{time,
+                lat,lon,desc},null,null,null,null,null);
     }
 }
 

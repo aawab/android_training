@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
                 String email = emailInput.getText().toString();
                 String pass = passInput.getText().toString();
                 if(isValidEmail(email)) {
-                    checkValidPassword(pass);
+                    Toast.makeText(getApplicationContext(),checkValidPassword(pass),
+                            Toast.LENGTH_LONG).show();
                 }
                 else Toast.makeText(getApplicationContext(),"Invalid email address",
                         Toast.LENGTH_SHORT).show();
@@ -53,23 +54,19 @@ public class MainActivity extends AppCompatActivity {
         else return true;
     }
     //helper method to identify a valid password
-    public void checkValidPassword(String pass){
+    public String checkValidPassword(String pass){
         int len = pass.length();
         if (len >= 8) {
             if (!(pass.indexOf(' ') < 0)) {
                 //checks if entered password is entirely space characters.
                 if (allCharSame(pass)) {
-                    Toast.makeText(getApplicationContext(), "The provided password " +
-                            "is " + "invalid", Toast.LENGTH_SHORT).show();
+                    return"The provided password " +"is " + "invalid";
                 }
-                else Toast.makeText(getApplicationContext(),"Login success!",
-                        Toast.LENGTH_SHORT).show();
+                else return"Login success!";
             }
-            else Toast.makeText(getApplicationContext(),"Login success!",
-                    Toast.LENGTH_SHORT).show();
+            else return"Login success!";
         }
-        else Toast.makeText(getApplicationContext(), "The provided password is " +
-                "too short", Toast.LENGTH_SHORT).show();
+        else return"The provided password is too short";
     }
     //helper method to check if all charas in a string are the same
     public boolean allCharSame (String str){

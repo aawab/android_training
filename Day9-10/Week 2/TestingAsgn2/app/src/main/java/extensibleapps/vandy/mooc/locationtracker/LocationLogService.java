@@ -29,6 +29,9 @@ public class LocationLogService extends Service {
 
     private LocationManager mLocationManager;
 
+    private final CancellationSignal mCancellationSignal = new CancellationSignal();
+    private final Executor executor;
+    private final Consumer<Location> consumer;
     // Binder given to clients to reference service
     private final IBinder mBinder = new LocalBinder();
 
@@ -72,8 +75,11 @@ public class LocationLogService extends Service {
 
         Log.v(TAG, "Service Started");
 
-        // TODO | Perform any start up actions, gather the required data, and store said data in the database using the LocLogDBManger.
-
+        // TODO finished?| Perform any start up actions, gather the required data, and store said data in the database using the LocLogDBManger.
+        ;
+        mDBManager= new LocLogDBManager(getApplicationContext());
+        mDBManager.storeLocationData(mLocationManager.getCurrentLocation(mLocationManager.getAllProviders(),mCancellationSignal,
+                executor.execute(),consumer));
         // Stop the service once the logging is complete
         stopSelf(startId);
 

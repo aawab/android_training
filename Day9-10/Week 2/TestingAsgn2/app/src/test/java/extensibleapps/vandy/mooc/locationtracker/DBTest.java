@@ -796,28 +796,9 @@ public class DBTest extends AndroidTestCase {
 //            reference = {
 //            }
 //    )
-//    @Test
-//    // todo get rid of this test for the assignment
-//    public void testSQLInjection() throws Exception {
 //
-//        dataEntryHelper();
+//    // todo FINISHED get rid of this test for the assignment
 //
-//        // TODO test in the service? Or DBManager (Assuming it is provided)
-//        // TODO What kind of behavior should we expect given injection?
-//
-//        // Test to see if a delete injection is possible on insertion
-//
-////        mDB.storeLocationData(TIME1, LAT1, LONGI1, DESC1);
-//
-//
-////        mDB.storeLocationData(TIME2, LAT2, LONGI2, DESC2 +
-////                 "); DELETE FROM " + LocDBContract.FeedEntry.TABLE_NAME +
-////                " WHERE " +LocDBContract.FeedEntry.COLUMN_NAME_ENTRY_TIME +
-////                "=" + TIME1 + ";");
-//
-//        Cursor cur = mDB.queryEntries(null, null, null, "'" + DESC1 + "' or desc!='hi'");
-//        assertEquals(cur.getCount(), 1);
-//    }
 
     @Rubric(
             value = "testUsingSQLiteDatabase()",
