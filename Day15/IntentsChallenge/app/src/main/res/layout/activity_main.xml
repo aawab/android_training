@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/titleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center_horizontal"
+        android:text="Contacts App" />
+
+    <ImageView
+        android:id="@+id/smileyResult"
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:layout_marginTop="15dp"
+        app:srcCompat="@drawable/greenface" />
+
+    <ImageView
+        android:id="@+id/phoneResult"
+        android:layout_width="match_parent"
+        android:layout_height="83dp"
+        android:clickable="true"
+        app:srcCompat="@drawable/phone" />
+
+    <ImageView
+        android:id="@+id/webResult"
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:clickable="true"
+        app:srcCompat="@drawable/web" />
+
+    <ImageView
+        android:id="@+id/locationResult"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_baseline_location_on_24" />
+
+    <Button
+        android:id="@+id/buttonNew"
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:text="create new contact"
+        app:backgroundTint="@color/teal_200" />
+</LinearLayout>
