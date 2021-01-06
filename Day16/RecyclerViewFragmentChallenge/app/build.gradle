@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "org.coursera.sustainableapps.fragment_recyclerview_challenge"
+        applicationId "org.coursera.sustainableapps.recyclerviewfragmentchallenge"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
