@@ -1,0 +1,5 @@
+Title
+
+RSS Feed not loading in first project, says stuff is deprecated
+
+SMSManager stops app immediaely after pressing button, not sure why

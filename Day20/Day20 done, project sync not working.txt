@@ -1,0 +1,2 @@
+Done, but project widget doesn't work. perhaps due to outdated(deprecated) methods in classes like AsyncTask and others
+tht the instructor used??
