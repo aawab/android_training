@@ -1,0 +1,3 @@
+WOOHOO !!!
+
+git status thingcame from the double !! for some reason ;( damn ruined my commit
