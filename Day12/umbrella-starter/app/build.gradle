@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-  compileSdkVersion rootProject.ext.compileSdkVersion
+  compileSdkVersion 28
   defaultConfig {
     applicationId "com.raywenderlich.android.rwandroidtutorial"
     minSdkVersion rootProject.ext.minSdkVersion
@@ -41,6 +41,7 @@ dependencies {
   androidTestImplementation 'com.android.support.test:runner:1.0.2'
   androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+  testImplementation 'org.mockito:mockito-core:2.22.0'
   //JSON PARSING
   implementation "com.squareup.moshi:moshi:$moshiVersion"
 }

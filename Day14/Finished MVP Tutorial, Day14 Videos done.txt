@@ -1,0 +1,7 @@
+Title
+
+Fixed MVP tutorial project issues. Searched up a solution and I was able to find one. Simply had to specify a
+kotlinVersion in the build.gradle file, though there were still some mismatched version issues. Still ran
+the program just fine.
+
+Day14 Videos done
